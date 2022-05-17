@@ -7,13 +7,6 @@ from psychopy.hardware import keyboard
 # altenative keyboard read-out?
 from pyglet.window import key
 
-# fix a bug?
-#import ctypes
-#xlib = ctypes.cdll.LoadLibrary("libX11.so")
-#xlib.XInitThreads()
-
-
-#We really do need to know the operating system to answer this one. If you’re using ubuntu then this is the issue:
 #To get psychtoolbox working for keyboard use you need the following steps to raise the priority of the experiment process. The idea is that to give you permission to do this without using super-user permissions to run your study (which would be bad for security) you need to add yourself to a group (e.g create a psychopy group) and then give that group permission to raise the priority of our process without being su:
 
 #sudo groupadd --force psychopy
@@ -24,14 +17,6 @@ from pyglet.window import key
 #@psychopy   -  nice       -20
 #@psychopy   -  rtprio     50
 #@psychopy   -  memlock    unlimited
-
-
-
-# 600 dots
-# 0.16667 dot life time
-# 0.015 dot size
-
-# expno: 1, 2, 3: dot frames / dot fields tasks with various numbers of trials
 
 
 def run_exp(expno=1, setup='tablet'):
@@ -231,13 +216,18 @@ def doTrial(cfg):
         # flip offset according to invert percepts:
         offsetX = offsetX * xfactor
 
-        # show frame for the classic and bar frames:
-        if trialdict['stimtype'] in ['classicframe', 'barframe']:
+        # show frame for the classic frame:
+        if trialdict['stimtype'] in ['classicframe']:
             frame_pos = [offsetX+frameoffset[0], frameoffset[1]]
             cfg['hw']['white_frame'].pos = frame_pos
             cfg['hw']['white_frame'].draw()
             cfg['hw']['gray_frame'].pos = frame_pos
             cfg['hw']['gray_frame'].draw()
+
+        if trialdict['stimtype'] in ['barframe']:
+            frame_pos = [offsetX+frameoffset[0], frameoffset[1]]
+            cfg['hw']['white_bar'].pos = frame_pos
+            cfg['hw']['white_bar'].draw()
 
         # flash the dots, if necessary:
         if flash_red:
@@ -537,12 +527,17 @@ def getTasks(cfg):
     if cfg['expno']==2:
 
         condictionary = [
-                         {'period':1/3, 'amplitude':12, 'stimtype':'classicframe'},
-                         {'period':1/3, 'amplitude':12, 'stimtype':'barframe', 'flashoffset':0},
-                         {'period':1/3, 'amplitude':12, 'stimtype':'barframe', 'flashoffset':3.5},
-                         {'period':1/3, 'amplitude':12, 'stimtype':'barframe', 'flashoffset':7.0},
-                         {'period':1/3, 'amplitude':12, 'stimtype':'barframe', 'flashoffset':10.5},
-                         {'period':1/3, 'amplitude':12, 'stimtype':'barframe', 'flashoffset':14.0},
+                         {'period':1/2, 'amplitude':12, 'stimtype':'classicframe'},
+#                         {'period':1/2, 'amplitude':12, 'stimtype':'barframe', 'frameoffset':0},
+#                         {'period':1/2, 'amplitude':12, 'stimtype':'barframe', 'frameoffset':3.5},
+#                         {'period':1/2, 'amplitude':12, 'stimtype':'barframe', 'frameoffset':7.0},
+#                         {'period':1/2, 'amplitude':12, 'stimtype':'barframe', 'frameoffset':10.5},
+#                         {'period':1/2, 'amplitude':12, 'stimtype':'barframe', 'frameoffset':14.0},
+
+#                         {'period':1/2, 'amplitude':12, 'stimtype':'classicframe', 'frameoffset':5},
+                         {'period':1/2, 'amplitude':12, 'stimtype':'classicframe', 'frameoffset':10},
+#                         {'period':1/2, 'amplitude':12, 'stimtype':'classicframe', 'frameoffset':15},
+                         {'period':1/2, 'amplitude':12, 'stimtype':'classicframe', 'frameoffset':20},
                         ]
 
         return( dictToBlockTrials(cfg=cfg, condictionary=condictionary, nblocks=1, nrepetitions=1) )
